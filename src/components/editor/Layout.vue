@@ -14,10 +14,13 @@ export default defineComponent({
     Button,
     Panel
   },
-  emits: ['onSelectedItem'],
+  emits: ['onSelectedItem', 'onDeleteSelectedItem'],
   methods: {
     onClick(element) {
       this.$emit('onSelectedItem', element)
+    },
+    onDeleteItem(element) {
+      this.$emit('onDeleteSelectedItem', element)
     }
   }
 })
@@ -27,11 +30,14 @@ export default defineComponent({
   <Panel header="Page layout" class="mr-1 mb-1">
     <draggable class="" :list="fields" group="people" item-key="type">
       <template #item="{ element }">
-        <Button
-          :label="`${element.type} : ${element.name.sk}`"
-          @click="(e) => onClick(element)"
-          class="mr-2 mb-2 block"
-        />
+        <div class="flex flex-row">
+          <Button
+            :label="`${element.type} : ${element.name.sk}`"
+            @click="(e) => onClick(element)"
+            class="mr-2 mb-2 block flex-grow-1"
+          />
+          <Button label="X" @click="(e) => onDeleteItem(element)" class="mr-2 mb-2 block" />
+        </div>
       </template>
     </draggable>
   </Panel>

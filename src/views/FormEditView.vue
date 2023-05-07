@@ -113,6 +113,14 @@ const onSelectedValue = function (item) {
   state.selectedValue = item
   console.log('onSelectedValue', this)
 }
+const onDeleteSelectedItem = function (item) {
+  console.log('todelete', item, state.fields)
+  if (!state.fields) return
+  state.fields = state.fields.filter(function (el) {
+    return el != item
+  })
+}
+
 const onShowCreateForm = function (val) {
   state.showCreateForm = val
 }
@@ -139,7 +147,11 @@ const onSelectedItemUpdate = function (item) {
           @onShowEditForm="onShowEditForm"
           @onShowTable="onShowTable"
         ></Pallete>
-        <Layout :fields="state.fields" @onSelectedItem="onSelectedItem"></Layout>
+        <Layout
+          :fields="state.fields"
+          @onSelectedItem="onSelectedItem"
+          @onDeleteSelectedItem="onDeleteSelectedItem"
+        ></Layout>
         <ComponentConfig
           v-if="state.selectedItem"
           :selectedItem="state.selectedItem"
@@ -155,13 +167,14 @@ const onSelectedItemUpdate = function (item) {
           :fields="state.fields"
           :selectedValue="state.selectedValue"
         ></EditForm>
-        <Table
-          v-if="state.showTable"
-          :data="state.products"
-          :fields="state.fields"
-          :selectedValue="state.selectedValue"
-          @onSelectedValue="onSelectedValue"
-        ></Table></div
+        <Panel header="Table" class="mr-1 mb-1" v-if="state.showTable">
+          <Table
+            :data="state.products"
+            :fields="state.fields"
+            :selectedValue="state.selectedValue"
+            @onSelectedValue="onSelectedValue"
+          ></Table>
+        </Panel></div
     ></Panel>
   </div>
 </template>
